@@ -16,14 +16,39 @@ class PopularMoviesViewModel {
     weak var delegate: PopularMoviesViewModelDelegate?
     var pageNo = 0
     var requestPending = false
+    let sortParameters = ["Most popular first", "Highest rated first"]
+    var selectedSortParam: String = "Most popular first" {
+        didSet{
+            if oldValue != selectedSortParam {
+                resetMovies()
+                fetchMovies()
+            }
+        }
+    }
     
-
-    
-    func fetchPopularMovies() {
+    func fetchMovies() {
         guard !requestPending else { return }
-        let urlString = "\(Constants.popularMoviesAPIURL)&page=\(pageNo+1)"
+        var urlString = ""
+        if(selectedSortParam == sortParameters[0]) {
+            urlString = "\(Constants.popularMoviesAPIURL)&page=\(pageNo+1)"
+        } else {
+            urlString = "\(Constants.topRatedMoviesAPIURL)&page=\(pageNo+1)"
+        }
+        
         performRequest(with: urlString)
     }
+    
+    func resetMovies(){
+        movies = []
+        pageNo = 0
+    }
+    
+    func fetchMovies(with name: String) {
+        resetMovies()
+        let urlString = "\(Constants.searchMoviesAPIURL)&query=\(name)&page=\(pageNo+1)"
+        performRequest(with: urlString)
+    }
+            
     
     func performRequest(with urlString: String) {
 
@@ -58,6 +83,7 @@ class PopularMoviesViewModel {
 //        }
 //        return self.popularMovies
 //    }
+    
     func parseJSON(_ moviesData: Data) -> [MovieModel]? {
         let decoder = JSONDecoder()
         do {

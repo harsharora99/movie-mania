@@ -16,8 +16,15 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <searchBar contentMode="redraw" placeholder="Search a movie" translatesAutoresizingMaskIntoConstraints="NO" id="4hI-Pm-vV0">
+                                <rect key="frame" x="0.0" y="88" width="414" height="51"/>
+                                <textInputTraits key="textInputTraits" returnKeyType="search"/>
+                                <connections>
+                                    <outlet property="delegate" destination="BYZ-38-t0r" id="epS-jM-oBP"/>
+                                </connections>
+                            </searchBar>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="4pr-dS-MXb">
-                                <rect key="frame" x="0.0" y="139" width="414" height="736"/>
+                                <rect key="frame" x="5" y="209" width="404" height="687"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Jty-vu-fiY">
                                     <size key="itemSize" width="128" height="128"/>
@@ -27,29 +34,44 @@
                                 </collectionViewFlowLayout>
                                 <cells/>
                             </collectionView>
-                            <searchBar contentMode="redraw" placeholder="Search a movie" translatesAutoresizingMaskIntoConstraints="NO" id="4hI-Pm-vV0">
-                                <rect key="frame" x="0.0" y="88" width="414" height="51"/>
-                                <textInputTraits key="textInputTraits" returnKeyType="search"/>
-                                <connections>
-                                    <outlet property="delegate" destination="BYZ-38-t0r" id="epS-jM-oBP"/>
-                                </connections>
-                            </searchBar>
+                            <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="00P-6Z-nPx">
+                                <rect key="frame" x="5" y="144" width="404" height="60"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sort by:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="k5a-Jr-IBR">
+                                        <rect key="frame" x="0.0" y="0.0" width="68.5" height="60"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Vzz-MQ-Jfc">
+                                        <rect key="frame" x="68.5" y="0.0" width="335.5" height="60"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="60" id="Fr2-au-CA4"/>
+                                        </constraints>
+                                    </pickerView>
+                                </subviews>
+                            </stackView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstAttribute="bottom" secondItem="4pr-dS-MXb" secondAttribute="bottom" constant="21" id="1wX-jb-oNU"/>
+                            <constraint firstItem="4pr-dS-MXb" firstAttribute="top" secondItem="00P-6Z-nPx" secondAttribute="bottom" constant="5" id="3wF-Pg-vKz"/>
+                            <constraint firstItem="00P-6Z-nPx" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="5" id="7Qf-zU-4mu"/>
                             <constraint firstItem="4hI-Pm-vV0" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="Ems-dJ-fHB"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="4pr-dS-MXb" secondAttribute="trailing" constant="5" id="J8q-Ml-ACb"/>
                             <constraint firstItem="4hI-Pm-vV0" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="Jhb-ls-y5C"/>
-                            <constraint firstAttribute="trailing" secondItem="4pr-dS-MXb" secondAttribute="trailing" id="Nlr-eS-1My"/>
+                            <constraint firstAttribute="trailing" secondItem="00P-6Z-nPx" secondAttribute="trailing" constant="5" id="Tqw-UX-61c"/>
                             <constraint firstItem="4hI-Pm-vV0" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="WKq-cr-NS6"/>
-                            <constraint firstItem="4pr-dS-MXb" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="kSX-ne-qEs"/>
-                            <constraint firstItem="4pr-dS-MXb" firstAttribute="top" secondItem="4hI-Pm-vV0" secondAttribute="bottom" id="yXI-Cw-m0u"/>
+                            <constraint firstAttribute="bottom" secondItem="4pr-dS-MXb" secondAttribute="bottom" id="hSm-nX-mAI"/>
+                            <constraint firstItem="00P-6Z-nPx" firstAttribute="top" secondItem="4hI-Pm-vV0" secondAttribute="bottom" constant="5" id="oqm-B3-Ies"/>
+                            <constraint firstItem="4pr-dS-MXb" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="5" id="zfx-my-m7f"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Movie Mania" id="bpm-9o-57W"/>
                     <connections>
                         <outlet property="collectionView" destination="4pr-dS-MXb" id="iGP-l7-lLn"/>
+                        <outlet property="searchBar" destination="4hI-Pm-vV0" id="yos-QW-6yL"/>
+                        <outlet property="sortParamPicker" destination="Vzz-MQ-Jfc" id="HXQ-aY-RRf"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
