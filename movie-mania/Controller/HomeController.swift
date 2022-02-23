@@ -61,7 +61,6 @@ extension HomeController: UICollectionViewDataSource {
 
 extension HomeController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print("heyy")
         performSegue(withIdentifier: "goToDetails", sender: self)
     }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -124,25 +123,28 @@ extension HomeController: UISearchBarDelegate {
         sortSection.isHidden = false
         searchBar.text = ""
         searchBar.showsCancelButton = false
+        if viewModel.searchTerm != nil {
+            viewModel.searchTerm = nil
+        }
         searchBar.resignFirstResponder()
     }
 
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
         searchBar.showsCancelButton = false
     }
+    
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        viewModel.fetchMovies(with: searchBar.text!)
+        viewModel.searchTerm = searchBar.text!
         searchBar.resignFirstResponder()
     }
 
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        if searchBar.text?.count == 0 {
-            sortSection.isHidden = false
-            viewModel.resetMovies()
-            viewModel.fetchMovies()
-            searchBar.resignFirstResponder()
-        }
-    }
+//    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+//        if searchBar.text?.count == 0 {
+//            sortSection.isHidden = false
+//            viewModel.searchTerm = nil
+//            searchBar.resignFirstResponder()
+//        }
+//    }
 }
 
 
