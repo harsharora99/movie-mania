@@ -92,7 +92,7 @@ extension HomeController: UICollectionViewDelegateFlowLayout {
     layout collectionViewLayout: UICollectionViewLayout,
     minimumLineSpacingForSectionAt section: Int
   ) -> CGFloat {
-    return 1
+    return 15
   }
     
 
@@ -126,6 +126,7 @@ extension HomeController: UISearchBarDelegate {
     }
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         viewModel.fetchMovies(with: searchBar.text!)
+        searchBar.resignFirstResponder()
     }
 
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
