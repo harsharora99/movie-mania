@@ -11,6 +11,7 @@ class HomeController: UIViewController {
     
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var searchBar: UISearchBar!
+    @IBOutlet weak var sortSection: UIStackView!
     @IBOutlet weak var sortParamPicker: UIPickerView!
     
     var viewModel = PopularMoviesViewModel() //rename to viewModel
@@ -113,9 +114,11 @@ extension HomeController: PopularMoviesViewModelDelegate {
 
 extension HomeController: UISearchBarDelegate {
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        sortSection.isHidden = true
         searchBar.showsCancelButton = true
     }
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        sortSection.isHidden = false
         searchBar.text = ""
         searchBar.showsCancelButton = false
         searchBar.resignFirstResponder()
@@ -131,6 +134,7 @@ extension HomeController: UISearchBarDelegate {
 
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchBar.text?.count == 0 {
+            sortSection.isHidden = false
             viewModel.resetMovies()
             viewModel.fetchMovies()
             searchBar.resignFirstResponder()

@@ -34,7 +34,7 @@
                                 </collectionViewFlowLayout>
                                 <cells/>
                             </collectionView>
-                            <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="00P-6Z-nPx">
+                            <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="00P-6Z-nPx" userLabel="Sort Section">
                                 <rect key="frame" x="5" y="144" width="404" height="60"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sort by:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="k5a-Jr-IBR">
@@ -72,6 +72,7 @@
                         <outlet property="collectionView" destination="4pr-dS-MXb" id="iGP-l7-lLn"/>
                         <outlet property="searchBar" destination="4hI-Pm-vV0" id="yos-QW-6yL"/>
                         <outlet property="sortParamPicker" destination="Vzz-MQ-Jfc" id="HXQ-aY-RRf"/>
+                        <outlet property="sortSection" destination="00P-6Z-nPx" id="ehC-EI-iHZ"/>
                         <segue destination="esN-OW-vPe" kind="show" identifier="goToDetails" id="QRV-xZ-GZ5"/>
                     </connections>
                 </viewController>
