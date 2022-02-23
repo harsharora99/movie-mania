@@ -25,7 +25,6 @@ class MovieDetailsController: UIViewController {
             moviePoster.kf.indicatorType = .activity
             moviePoster.kf.setImage(
                 with: URL(string: moviePosterURL),
-                placeholder: UIImage(named: "placeholderImage"),
                 options: [
                     .processor(processor),
                     .scaleFactor(UIScreen.main.scale),

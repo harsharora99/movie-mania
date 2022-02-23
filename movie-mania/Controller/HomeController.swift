@@ -46,7 +46,6 @@ extension HomeController: UICollectionViewDataSource {
         cell.moviePoster.kf.indicatorType = .activity
         cell.moviePoster.kf.setImage(
             with: URL(string: moviePosterURL),
-            placeholder: UIImage(named: "placeholderImage"),
             options: [
                 .processor(processor),
                 .scaleFactor(UIScreen.main.scale),
@@ -72,29 +71,33 @@ extension HomeController: UICollectionViewDelegate {
             destinationVC.movie = viewModel.movies[indexPath.row]
         }
     }
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        if (indexPath.row == viewModel.movies.count - 1 ) {
+            viewModel.fetchMovies()
+        }
+    }
 }
 extension HomeController: UICollectionViewDelegateFlowLayout {
-  // 1
 
-  func collectionView(
+    func collectionView(
     _ collectionView: UICollectionView,
     layout collectionViewLayout: UICollectionViewLayout,
     sizeForItemAt indexPath: IndexPath
-  ) -> CGSize {
-    return CGSize(width: (view.frame.size.width/2) - 2, height: (view.frame.size.width/2) - 2)
-  }
+    ) -> CGSize {
+        return CGSize(width: (view.frame.size.width/2) - 2, height: (view.frame.size.width/2) - 2)
+    }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return 1
     }
 
-  func collectionView(
+    func collectionView(
     _ collectionView: UICollectionView,
     layout collectionViewLayout: UICollectionViewLayout,
     minimumLineSpacingForSectionAt section: Int
-  ) -> CGFloat {
-    return 15
-  }
+    ) -> CGFloat {
+        return 15
+    }
     
 
 }
