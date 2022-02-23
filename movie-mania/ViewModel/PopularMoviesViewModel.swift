@@ -65,8 +65,13 @@ class PopularMoviesViewModel {
     func performRequest(with urlString: String) {
 
         AF.request(urlString).responseDecodable(of: PopularMoviesData.self) { [weak self] response in
-            guard let fetchedMovies = response.value?.results else {return}
+            
             guard let strongSelf = self else { return }
+            guard let fetchedMovies = response.value?.results else {
+                strongSelf.delegate?.didFetchPopularMovies()
+                return
+            }
+        
             strongSelf.movies.append(contentsOf: fetchedMovies)
             strongSelf.pageNo += 1
             strongSelf.requestPending = false
