@@ -6,7 +6,7 @@
 //
 
 import Foundation
-
+import Alamofire
 protocol PopularMoviesViewModelDelegate: AnyObject {
     func didFetchPopularMovies()
 }
@@ -52,37 +52,16 @@ class PopularMoviesViewModel {
     
     func performRequest(with urlString: String) {
 
-        if let url = URL(string: urlString) {
-            let session = URLSession(configuration: .default)
-          
-            let task = session.dataTask(with: url) { [weak self] data, response, error in
-                guard let strongSelf = self else { return }
-                if(error != nil) {
-                    print(error!)
-                    return
-                }
-                
-                if let safeData = data {
-                    if let movies = strongSelf.parseJSON(safeData) {
-                        strongSelf.movies.append(contentsOf: movies)
-                        strongSelf.pageNo += 1
-                        strongSelf.requestPending = false
-                        strongSelf.delegate?.didFetchPopularMovies()
-                    }
-                }
-            }
-            //Start the task
-            self.requestPending = true
-            task.resume()
+        AF.request(urlString).responseDecodable(of: PopularMoviesData.self) { [weak self] response in
+            guard let fetchedMovies = response.value?.results else {return}
+            guard let strongSelf = self else { return }
+            strongSelf.movies.append(contentsOf: fetchedMovies)
+            strongSelf.pageNo += 1
+            strongSelf.requestPending = false
+            strongSelf.delegate?.didFetchPopularMovies()
         }
+
     }
-    
-//    mutating func appendMovies(moviesFetched: [MovieModel]) -> [MovieModel]{
-//        for movie in moviesFetched{
-//            self.popularMovies.append(movie)
-//        }
-//        return self.popularMovies
-//    }
     
     func parseJSON(_ moviesData: Data) -> [MovieModel]? {
         let decoder = JSONDecoder()

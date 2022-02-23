@@ -6,20 +6,13 @@
 //
 
 import UIKit
-
+import Kingfisher
 class HomeController: UIViewController {
     
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var sortParamPicker: UIPickerView!
     
-    private let itemsPerRow: CGFloat = 2
-    private let sectionInsets = UIEdgeInsets(top: 50.0, left: 20.0, bottom: 50.0, right: 20.0)
-    
-    
-    //let sortBasis = ["asc", "desc"]
-    
-    //var movies: [[String: String]] = [[:]]
     var viewModel = PopularMoviesViewModel() //rename to viewModel
 
     override func viewDidLoad() {
@@ -29,47 +22,12 @@ class HomeController: UIViewController {
         sortParamPicker.dataSource = self
         sortParamPicker.delegate = self
         viewModel.fetchMovies()
+        collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.register(UINib(nibName: Constants.cellNibName, bundle: nil), forCellWithReuseIdentifier: Constants.cellIdentifier)
     }
 
 }
-
-
-//extension HomeController: UICollectionViewDelegateFlowLayout {
-//  // 1
-//  func collectionView(
-//    _ collectionView: UICollectionView,
-//    layout collectionViewLayout: UICollectionViewLayout,
-//    sizeForItemAt indexPath: IndexPath
-//  ) -> CGSize {
-//    // 2
-//    let paddingSpace = sectionInsets.left * (itemsPerRow + 1)
-//    let availableWidth = view.frame.width - paddingSpace
-//    let widthPerItem = availableWidth / itemsPerRow
-//    //CGSize(width: <#T##CGFloat#>, height: <#T##CGFloat#>)
-//    return CGSize(width: widthPerItem, height: widthPerItem)
-//  }
-//
-//  // 3
-//  func collectionView(
-//    _ collectionView: UICollectionView,
-//    layout collectionViewLayout: UICollectionViewLayout,
-//    insetForSectionAt section: Int
-//  ) -> UIEdgeInsets {
-//    return sectionInsets
-//  }
-//
-//  // 4
-//  func collectionView(
-//    _ collectionView: UICollectionView,
-//    layout collectionViewLayout: UICollectionViewLayout,
-//    minimumLineSpacingForSectionAt section: Int
-//  ) -> CGFloat {
-//    return sectionInsets.left
-//  }
-//}
-
 
 extension HomeController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -78,16 +36,73 @@ extension HomeController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.cellIdentifier, for: indexPath) as! MovieCell
-        cell.movieLabel.text = viewModel.movies[indexPath.row].title
+        let movie = viewModel.movies[indexPath.row]
+        cell.movieLabel.text = movie.title
+        let moviePosterURL = "\(Constants.imageAPIURL)\(movie.poster_path)"
+        
+        let processor = DownsamplingImageProcessor(size: cell.moviePoster.bounds.size)
+                     |> RoundCornerImageProcessor(cornerRadius: 20)
+        cell.moviePoster.kf.indicatorType = .activity
+        cell.moviePoster.kf.setImage(
+            with: URL(string: moviePosterURL),
+            placeholder: UIImage(named: "placeholderImage"),
+            options: [
+                .processor(processor),
+                .scaleFactor(UIScreen.main.scale),
+                .transition(.fade(1)),
+                .cacheOriginalImage
+            ])
+
         return cell
     }
     
     
 }
 
+extension HomeController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        print("heyy")
+        performSegue(withIdentifier: "goToDetails", sender: self)
+    }
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let destinationVC = segue.destination as! MovieDetailsController
+        
+        if let indexPath = self.collectionView.indexPathsForSelectedItems?[0] {
+            destinationVC.movie = viewModel.movies[indexPath.row]
+        }
+    }
+}
+extension HomeController: UICollectionViewDelegateFlowLayout {
+  // 1
+
+  func collectionView(
+    _ collectionView: UICollectionView,
+    layout collectionViewLayout: UICollectionViewLayout,
+    sizeForItemAt indexPath: IndexPath
+  ) -> CGSize {
+    return CGSize(width: (view.frame.size.width/2) - 2, height: (view.frame.size.width/2) - 2)
+  }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 1
+    }
+
+  func collectionView(
+    _ collectionView: UICollectionView,
+    layout collectionViewLayout: UICollectionViewLayout,
+    minimumLineSpacingForSectionAt section: Int
+  ) -> CGFloat {
+    return 1
+  }
+    
+
+}
+
+
+
+
 extension HomeController: PopularMoviesViewModelDelegate {
     func didFetchPopularMovies() {
-        //self.movies = movies
         DispatchQueue.main.async {
             self.collectionView.reloadData()
         }
