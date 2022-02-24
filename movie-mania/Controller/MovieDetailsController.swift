@@ -14,6 +14,8 @@ class MovieDetailsController: UIViewController {
     @IBOutlet weak var movieTitleLabel: UILabel!
     @IBOutlet weak var moviePoster: UIImageView!
     @IBOutlet weak var movieOverviewLabel: UILabel!
+    @IBOutlet weak var averageRatingLabel: UILabel!
+    @IBOutlet weak var releaseDateLabel: UILabel!
     override func viewDidLoad() {
         super.viewDidLoad()
         if let selectedMovie = movie {
@@ -32,6 +34,8 @@ class MovieDetailsController: UIViewController {
                     .cacheOriginalImage
                 ])
             movieOverviewLabel.text = selectedMovie.overview
+            averageRatingLabel.text = String(selectedMovie.vote_average)
+            releaseDateLabel.text = selectedMovie.release_date
    
         }
        
