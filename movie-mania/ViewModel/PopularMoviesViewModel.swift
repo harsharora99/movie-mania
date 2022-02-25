@@ -44,7 +44,7 @@ class PopularMoviesViewModel {
         } else {
             urlString = "\(Constants.topRatedMoviesAPIURL)&page=\(pageNo+1)"
         }
-        print(urlString)
+        //print(urlString)
         performRequest(with: urlString)
     }
     

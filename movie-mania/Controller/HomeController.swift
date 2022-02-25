@@ -15,6 +15,17 @@ class HomeController: UIViewController {
     @IBOutlet weak var sortParamPicker: UIPickerView!
     
     var viewModel = PopularMoviesViewModel() //rename to viewModel
+    
+    let flowLayout: UICollectionViewFlowLayout = {
+        let layout = UICollectionViewFlowLayout()
+        layout.minimumInteritemSpacing = 5
+        layout.minimumLineSpacing = 5
+        //layout.sectionInset = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
+        return layout
+    }()
+    
+    private let sectionInsets = UIEdgeInsets(top: 5.0, left: 5.0, bottom: 5.0, right: 5.0)
+    private let itemsPerRow: CGFloat = 2
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,7 +49,7 @@ extension HomeController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.cellIdentifier, for: indexPath) as! MovieCell
         let movie = viewModel.movies[indexPath.row]
-        cell.movieLabel.text = movie.title
+        //cell.movieLabel.text = movie.title
         let moviePosterURL = "\(Constants.imageAPIURL)\(movie.poster_path)"
         
         let processor = DownsamplingImageProcessor(size: cell.moviePoster.bounds.size)
@@ -77,26 +88,38 @@ extension HomeController: UICollectionViewDelegate {
     }
 }
 extension HomeController: UICollectionViewDelegateFlowLayout {
-
-    func collectionView(
-    _ collectionView: UICollectionView,
-    layout collectionViewLayout: UICollectionViewLayout,
-    sizeForItemAt indexPath: IndexPath
-    ) -> CGSize {
-        return CGSize(width: (view.frame.size.width/2) - 2, height: (view.frame.size.width/2) - 2)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 1
-    }
-
-    func collectionView(
-    _ collectionView: UICollectionView,
-    layout collectionViewLayout: UICollectionViewLayout,
-    minimumLineSpacingForSectionAt section: Int
-    ) -> CGFloat {
-        return 15
-    }
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+            let width = collectionView.bounds.width
+            let numberOfItemsPerRow: CGFloat = 2
+            let spacing: CGFloat = flowLayout.minimumInteritemSpacing
+            let availableWidth = width - spacing * (numberOfItemsPerRow + 1)
+            let itemDimension = floor(availableWidth / numberOfItemsPerRow)
+            return CGSize(width: itemDimension, height: (itemDimension * 15 / 10))
+        }
+//    func collectionView(
+//    _ collectionView: UICollectionView,
+//    layout collectionViewLayout: UICollectionViewLayout,
+//    sizeForItemAt indexPath: IndexPath
+//    ) -> CGSize {
+//        let paddingSpace = sectionInsets.left * (itemsPerRow + 1)
+//        let availableWidth = collectionView.frame.width - paddingSpace
+//        let widthPerItem = availableWidth / itemsPerRow
+//
+//        return CGSize(width: widthPerItem, height: widthPerItem)
+////        return CGSize(width: (collectionView.frame.size.width/2) - 2, height: (collectionView.frame.size.width/2) - 2)
+//    }
+//
+//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+//        return 1
+//    }
+//
+//    func collectionView(
+//    _ collectionView: UICollectionView,
+//    layout collectionViewLayout: UICollectionViewLayout,
+//    minimumLineSpacingForSectionAt section: Int
+//    ) -> CGFloat {
+//        return 5
+//    }
     
 
 }
