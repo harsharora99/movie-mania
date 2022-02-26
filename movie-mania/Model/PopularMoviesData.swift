@@ -9,7 +9,5 @@ import Foundation
 
 
 struct PopularMoviesData: Decodable{
-    var results: [MovieModel] = []
-
-    
+    var results: [Movie] = []
 }

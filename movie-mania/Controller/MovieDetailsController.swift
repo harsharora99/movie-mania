@@ -9,8 +9,7 @@ import UIKit
 import Kingfisher
 
 class MovieDetailsController: UIViewController {
-    var movie: MovieModel?
-    
+    var movie: Movie?
     @IBOutlet weak var movieTitleLabel: UILabel!
     @IBOutlet weak var moviePoster: UIImageView!
     @IBOutlet weak var movieOverviewLabel: UILabel!
@@ -20,7 +19,7 @@ class MovieDetailsController: UIViewController {
         super.viewDidLoad()
         if let selectedMovie = movie {
             movieTitleLabel.text = selectedMovie.title
-            let moviePosterURL = "\(Constants.imageAPIURL)\(selectedMovie.poster_path)"
+            let moviePosterURL = "\(Constants.imageAPIURL)\(selectedMovie.poster_path!)"
             //print(moviePosterURL)
             let processor = DownsamplingImageProcessor(size: moviePoster.bounds.size)
                          |> RoundCornerImageProcessor(cornerRadius: 20)
