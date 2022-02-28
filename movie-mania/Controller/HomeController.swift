@@ -33,7 +33,11 @@ class HomeController: UIViewController {
         searchBar.delegate = self
         sortParamPicker.dataSource = self
         sortParamPicker.delegate = self
-        viewModel.fetchMovies()
+        viewModel.loadMovies()
+       
+        if viewModel.movies.count == 0 {
+            viewModel.initialFetchForMovies()
+        }
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.register(UINib(nibName: Constants.cellNibName, bundle: nil), forCellWithReuseIdentifier: Constants.cellIdentifier)
@@ -50,7 +54,7 @@ extension HomeController: UICollectionViewDataSource {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.cellIdentifier, for: indexPath) as! MovieCell
         let movie = viewModel.movies[indexPath.row]
         //cell.movieLabel.text = movie.title
-        let moviePosterURL = "\(Constants.imageAPIURL)\(movie.poster_path)"
+        let moviePosterURL = "\(Constants.imageAPIURL)\(movie.posterPath)"
         
         let processor = DownsamplingImageProcessor(size: cell.moviePoster.bounds.size)
                      |> RoundCornerImageProcessor(cornerRadius: 20)
