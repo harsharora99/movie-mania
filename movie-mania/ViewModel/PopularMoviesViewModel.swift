@@ -12,13 +12,18 @@ protocol PopularMoviesViewModelDelegate: AnyObject {
     func didFetchPopularMovies()
 }
 
+enum SortParameter: String {
+    case popularity = "Most popular first"
+    case rating = "Highest rated first"
+}
+
 class PopularMoviesViewModel {
-    var movies: [MovieEntity] = []
+    private(set) var movies: [MovieEntity] = []
     private let moviesPerPage = 20
     weak var delegate: PopularMoviesViewModelDelegate?
     var pageNo = 0
     var requestPending = false
-    let sortParameters = ["Most popular first", "Highest rated first"]
+    let sortParameters: [SortParameter] = [.popularity, .rating]
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     var initialFetch = false
     var searchTerm: String? {
@@ -27,7 +32,7 @@ class PopularMoviesViewModel {
             fetchMovies()
         }
     }
-    var selectedSortParam: String = "Most popular first" {
+    var selectedSortParam: String = SortParameter.popularity.rawValue {
         didSet{
             if oldValue != selectedSortParam {
                 resetMovies()
@@ -49,11 +54,18 @@ class PopularMoviesViewModel {
         }
         return movies
     }
+    
+    func viewDidLoad() {
+        loadMovies()
+    }
     func loadMovies() {
         do {
             let movies = try fetchMoviesFromDB()
-            
-            appendMovies(fetchedMovies: movies)
+            if movies.count == 0 {
+                initialFetchForMovies()
+            } else {
+                appendMovies(fetchedMovies: movies)
+            }
         } catch {
             print("Error fetching data from context, \(error)")
         }
@@ -89,7 +101,7 @@ class PopularMoviesViewModel {
             if search.count > 0 {
                 urlString = "\(Constants.searchMoviesAPIURL)&query=\(search)&page=\(pageNo+1)"
             }
-        } else if(selectedSortParam == sortParameters[0]) {
+        } else if(selectedSortParam == sortParameters[0].rawValue) {
             urlString = "\(Constants.popularMoviesAPIURL)&page=\(pageNo+1)"
         } else {
             urlString = "\(Constants.topRatedMoviesAPIURL)&page=\(pageNo+1)"
@@ -103,13 +115,6 @@ class PopularMoviesViewModel {
         requestPending = false
     }
     
-//    func fetchMovies(with name: String) {
-//        resetMovies()
-//        let urlString =
-//        print(urlString)
-//        performRequest(with: urlString)
-//    }
-            
     
     func performRequest(with urlString: String) {
 
@@ -117,10 +122,7 @@ class PopularMoviesViewModel {
         AF.request(urlString).response { [weak self] response in
             
             guard let strongSelf = self else { return }
-//            guard let fetchedMovies = response.value?.results else {
-//                strongSelf.delegate?.didFetchPopularMovies()
-//                return
-//            }
+
             guard let fetchedMovies = strongSelf.parseJSON(response.data!) else {
                    strongSelf.delegate?.didFetchPopularMovies()
                    return
@@ -131,10 +133,6 @@ class PopularMoviesViewModel {
                 movies.append(movie)
             }
         
-//            strongSelf.movies.append(contentsOf: fetchedMovies)
-//            strongSelf.pageNo += 1
-//            strongSelf.requestPending = false
-//            strongSelf.delegate?.didFetchPopularMovies()
             strongSelf.appendMovies(fetchedMovies: movies)
         }
 

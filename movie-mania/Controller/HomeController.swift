@@ -28,16 +28,15 @@ class HomeController: UIViewController {
     private let itemsPerRow: CGFloat = 2
 
     override func viewDidLoad() {
+        defer {
+            viewModel.viewDidLoad()
+        }
         super.viewDidLoad()
         viewModel.delegate = self
         searchBar.delegate = self
         sortParamPicker.dataSource = self
         sortParamPicker.delegate = self
-        viewModel.loadMovies()
-       
-        if viewModel.movies.count == 0 {
-            viewModel.initialFetchForMovies()
-        }
+        
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.register(UINib(nibName: Constants.cellNibName, bundle: nil), forCellWithReuseIdentifier: Constants.cellIdentifier)
@@ -185,12 +184,12 @@ extension HomeController: UIPickerViewDataSource {
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return viewModel.sortParameters[row]
+        return viewModel.sortParameters[row].rawValue
     }
 }
 
 extension HomeController: UIPickerViewDelegate {
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        viewModel.selectedSortParam = viewModel.sortParameters[row]
+        viewModel.selectedSortParam = viewModel.sortParameters[row].rawValue
     }
 }
