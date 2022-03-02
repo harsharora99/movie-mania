@@ -32,7 +32,7 @@ class PopularMoviesViewModel {
             fetchMovies()
         }
     }
-    var selectedSortParam: String = SortParameter.popularity.rawValue {
+    var selectedSortParam: SortParameter = .popularity {
         didSet{
             if oldValue != selectedSortParam {
                 resetMovies()
@@ -101,7 +101,7 @@ class PopularMoviesViewModel {
             if search.count > 0 {
                 urlString = "\(Constants.searchMoviesAPIURL)&query=\(search)&page=\(pageNo+1)"
             }
-        } else if(selectedSortParam == sortParameters[0].rawValue) {
+        } else if(selectedSortParam == .popularity) {
             urlString = "\(Constants.popularMoviesAPIURL)&page=\(pageNo+1)"
         } else {
             urlString = "\(Constants.topRatedMoviesAPIURL)&page=\(pageNo+1)"

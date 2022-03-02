@@ -92,7 +92,7 @@
                                 <rect key="frame" x="0.0" y="88" width="414" height="878"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="T5U-vc-WRx" userLabel="Container View">
-                                        <rect key="frame" x="0.0" y="0.0" width="414" height="900"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="768"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="15" translatesAutoresizingMaskIntoConstraints="NO" id="1Oq-bw-69F">
                                                 <rect key="frame" x="20" y="20" width="374" height="50"/>
@@ -164,6 +164,7 @@
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <constraints>
                                             <constraint firstItem="1Oq-bw-69F" firstAttribute="leading" secondItem="T5U-vc-WRx" secondAttribute="leading" constant="20" id="1J3-TT-dUn"/>
+                                            <constraint firstAttribute="bottom" secondItem="Khl-dt-I3R" secondAttribute="bottom" constant="50" id="2f0-sU-dvn"/>
                                             <constraint firstAttribute="trailing" secondItem="hXk-6u-eK3" secondAttribute="trailing" constant="20" id="5ue-1W-6cB"/>
                                             <constraint firstItem="Khl-dt-I3R" firstAttribute="top" secondItem="5Y8-Bw-jDc" secondAttribute="bottom" constant="40" id="Czo-CR-YKD"/>
                                             <constraint firstItem="hXk-6u-eK3" firstAttribute="top" secondItem="n2G-LC-yoa" secondAttribute="bottom" constant="40" id="NXL-CP-LSa"/>
@@ -176,7 +177,6 @@
                                             <constraint firstItem="n2G-LC-yoa" firstAttribute="centerX" secondItem="T5U-vc-WRx" secondAttribute="centerX" id="tIW-px-6oF"/>
                                             <constraint firstItem="Khl-dt-I3R" firstAttribute="leading" secondItem="T5U-vc-WRx" secondAttribute="leading" constant="20" id="uZ5-qU-Zei"/>
                                             <constraint firstItem="n2G-LC-yoa" firstAttribute="leading" secondItem="T5U-vc-WRx" secondAttribute="leading" constant="20" id="w70-Y2-mac"/>
-                                            <constraint firstAttribute="height" constant="900" id="wUE-jK-uSh"/>
                                             <constraint firstItem="n2G-LC-yoa" firstAttribute="top" secondItem="1Oq-bw-69F" secondAttribute="bottom" constant="47" id="xpP-RF-bWB"/>
                                         </constraints>
                                     </view>

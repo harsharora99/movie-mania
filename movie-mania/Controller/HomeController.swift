@@ -190,6 +190,6 @@ extension HomeController: UIPickerViewDataSource {
 
 extension HomeController: UIPickerViewDelegate {
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        viewModel.selectedSortParam = viewModel.sortParameters[row].rawValue
+        viewModel.selectedSortParam = viewModel.sortParameters[row]
     }
 }
